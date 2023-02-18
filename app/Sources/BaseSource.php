@@ -37,9 +37,9 @@ abstract class BaseSource implements Source
     {
         $result = [];
 
-        foreach ($this->strategies as $strategy) {
-            $content = $this->fetcher->fetch($this->config['url']);
+        $content = $this->fetcher->fetch($this->config['url']);
 
+        foreach ($this->strategies as $strategy) {
             $result = [
                 ...$result,
                 ...$strategy->media($content),
