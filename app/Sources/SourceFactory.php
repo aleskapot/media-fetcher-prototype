@@ -24,15 +24,10 @@ class SourceFactory
 
         return match ($sourceName) {
             SourceType::Instagram =>
-                (new InstagramSource(
-                    $fetcher,
-                    [
-                    'url' => 'https://instagram.com/',
-                    // etc ...
-                    ],
-                ))
-                    ->addStrategy(new InstagramPhoto)
-                    ->addStrategy(new InstagramVideo),
+            (new InstagramSourceBuilder([
+                'url' => 'https://instagram.com/',
+                // etc ...
+            ]))->make(),
 
             SourceType::Vkontakte =>
                 new VkontakteSource(
