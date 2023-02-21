@@ -17,10 +17,10 @@ abstract class BaseSource implements Source
     /** @var array<int, Strategy> */
     protected array $strategies;
 
-    public function __construct(protected PageRepository $page, public array $config)
-    {
-        // Service init
-    }
+    public function __construct(
+        protected PageRepository $page,
+        protected array $config
+    ) {}
 
     /**
      * @param Strategy $strategy
