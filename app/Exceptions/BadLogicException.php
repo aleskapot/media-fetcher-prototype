@@ -4,7 +4,7 @@ namespace App\Exception;
 
 use Exception;
 
-class LogicError extends Exception
+class BadLogicException extends Exception
 {
     //
 }
