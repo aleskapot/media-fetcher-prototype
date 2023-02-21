@@ -2,19 +2,22 @@
 declare(strict_types=1);
 namespace App\Sources;
 
-use App\Contracts\Fetcher;
 use App\Contracts\Source;
 use App\DTO\MediaData;
+use App\Exception\DOMParseException;
+use App\Repositories\PageRepository;
 use App\Sources\Strategies\Strategy;
 
 abstract class BaseSource implements Source
 {
     // Shared source logic here
 
+    protected SourceType $type;
+
     /** @var array<int, Strategy> */
     protected array $strategies;
 
-    public function __construct(public Fetcher $fetcher, public array $config)
+    public function __construct(protected PageRepository $page, public array $config)
     {
         // Service init
     }
@@ -30,22 +33,30 @@ abstract class BaseSource implements Source
     }
 
     /**
-     * @param string $page
+     * @param string $url
      * @return array<int, MediaData>
+     * @throws DOMParseException
      */
-    public function parseMedia(string $page): array
+    public function parseMedia(string $url): array
     {
+        $document = $this->page->byUrl($url);
+
         $result = [];
-
-        $content = $this->fetcher->fetch($this->config['url']);
-
         foreach ($this->strategies as $strategy) {
             $result = [
                 ...$result,
-                ...$strategy->media($content),
+                ...$strategy->media($document),
                 ];
         }
 
         return $result;
+    }
+
+    /**
+     * @return SourceType
+     */
+    public function getType(): SourceType
+    {
+        return $this->type;
     }
 }

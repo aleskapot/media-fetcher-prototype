@@ -4,5 +4,5 @@ namespace App\Sources;
 
 class VkontakteSource extends BaseSource
 {
-    //
+    protected SourceType $type = SourceType::Vkontakte;
 }

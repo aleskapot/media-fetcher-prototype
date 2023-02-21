@@ -3,10 +3,8 @@ declare(strict_types=1);
 namespace App\Sources;
 
 use App\Contracts\Source;
-use App\Exception\LogicError;
+use App\Exception\BadLogicException;
 use App\Fetcher\HttpFetcher;
-use App\Sources\Strategies\InstagramPhoto;
-use App\Sources\Strategies\InstagramVideo;
 
 class SourceFactory
 {
@@ -14,7 +12,7 @@ class SourceFactory
     /**
      * @param SourceType $sourceName
      * @return Source
-     * @throws LogicError
+     * @throws BadLogicException
      */
     public function create(SourceType $sourceName): Source
     {
@@ -29,16 +27,8 @@ class SourceFactory
                 // etc ...
             ]))->make(),
 
-            SourceType::Vkontakte =>
-                new VkontakteSource(
-                    $fetcher,
-                    [
-                    // config
-                    ],
-                ),
-
             default =>
-                throw new LogicError('Unknown source type ' . $sourceName->name),
+                throw new BadLogicException('Unknown source type ' . $sourceName->name),
         };
     }
 }

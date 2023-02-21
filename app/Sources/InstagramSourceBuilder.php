@@ -6,6 +6,7 @@ namespace App\Sources;
 use App\Contracts\Fetcher;
 use App\Contracts\Source;
 use App\Fetcher\HttpFetcher;
+use App\Repositories\PageRepository;
 use App\Sources\Strategies\Strategy;
 
 class InstagramSourceBuilder
@@ -17,7 +18,7 @@ class InstagramSourceBuilder
 
     protected function strategies(): array
     {
-        // TODO read from config file
+        // TODO read from config file for strategies
         return [
             \App\Sources\Strategies\InstagramPhoto::class,
             \App\Sources\Strategies\InstagramVideo::class,
@@ -42,7 +43,7 @@ class InstagramSourceBuilder
             ]);
         }
 
-        $source = new InstagramSource($this->fetcher, $this->config);
+        $source = new InstagramSource(new PageRepository($this->fetcher), $this->config);
 
         foreach ($this->strategies() as $strategyClass) {
             /** @var Strategy $strategy */
